@@ -46,6 +46,7 @@
     "max-len": [
       "error",
       {
+        "import/extensions": ["off"],
         "code": 120,
         "ignoreComments": true,
         "ignoreStrings": true,
