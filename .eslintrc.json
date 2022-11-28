@@ -1,16 +1,15 @@
 {
-  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaVersion": "latest"
   },
+  "parser": "@babel/eslint-parser",
   "env": {
     "browser": true,
     "node": true,
     "commonjs": true,
-    "es2022": true,
-    "jest": true
+    "es2022": true
   },
-  // "globals": { "_": true },
+  "globals": { "_": true },
   "plugins": ["import", "html"],
   "extends": ["airbnb-base", "prettier"],
   "rules": {
@@ -43,17 +42,15 @@
       }
     ],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/extensions": ["off"],
     "max-len": [
       "error",
       {
-        "import/extensions": ["off"],
         "code": 120,
         "ignoreComments": true,
         "ignoreStrings": true,
         "ignoreTemplateLiterals": true
       }
-    ],
-    "import/extensions": ["off"]
-    // prettier의 printWidth 옵션 대신 사용
+    ] // prettier의 printWidth 옵션 대신 사용,,
   }
 }
