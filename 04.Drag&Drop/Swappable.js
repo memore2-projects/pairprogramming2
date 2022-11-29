@@ -37,10 +37,8 @@ const changeLanguagePosition = (dragLanguage, dropLanguage) => {
 export default $swappable => {
   let dragLanguage = '';
 
-  window.addEventListener('DOMContentLoaded', () => {
-    creatSuffleLanguages();
-    render($swappable);
-  });
+  creatSuffleLanguages();
+  render($swappable);
 
   $swappable.addEventListener('dragstart', e => {
     dragLanguage = e.target.textContent.trim();
