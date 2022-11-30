@@ -35,13 +35,11 @@ const changeLanguagePosition = (dragLanguage, dropLanguage) => {
 };
 
 export default $swappable => {
-  let dragLanguage = '';
-
   creatSuffleLanguages();
   render($swappable);
 
   $swappable.addEventListener('dragstart', e => {
-    dragLanguage = e.target.textContent.trim();
+    e.dataTransfer.setData('dragLanguage', e.target.textContent.trim());
   });
 
   $swappable.addEventListener('dragover', e => {
@@ -65,7 +63,7 @@ export default $swappable => {
 
     e.target.parentNode.classList.remove('over');
 
-    changeLanguagePosition(dragLanguage, e.target.textContent.trim());
+    changeLanguagePosition(e.dataTransfer.getData('dragLanguage'), e.target.textContent.trim());
     render($swappable);
   });
 };
