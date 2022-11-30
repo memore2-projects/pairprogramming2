@@ -19,11 +19,10 @@ const render = $swappable => {
 };
 
 const creatSuffleLanguages = () => {
-  const randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
 
-  languages.forEach(item => {
-    const randomIndex = randomArray.splice(Math.floor(Math.random() * randomArray.length), 1);
-    suffleLanguages[randomIndex] = item;
+  languages.forEach((item, index) => {
+    suffleLanguages[randomArray[index]] = item;
   });
 };
 
