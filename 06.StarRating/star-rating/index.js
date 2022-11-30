@@ -1,43 +1,44 @@
 // prettier-ignore
-const printStarRating = $container => {
+const setStarsInit = $container => {
+  [...document.querySelectorAll('link')]
+  .at(-1)
+  .insertAdjacentHTML('afterend', '<link href="star-rating/theme.css" rel="stylesheet" />');
+
   $container.innerHTML = `
     <div class='star-rating-container'>
-      ${Array(+$container.dataset.maxRating).fill(0)
+      ${Array(+$container.dataset.maxRating).fill('')
         .map(() => `<i class='bx bxs-star'></i>`).join('')}
     </div>`
 }
 
+const changeStarsStyle = ($star, className) => {
+  const stars = [...$star.parentNode.children];
+  const targetIndex = stars.findIndex(item => item === $star);
+
+  stars.forEach((star, index) => {
+    star.classList.toggle(className, index <= +targetIndex);
+  });
+};
+
 const StarRating = $container => {
-  [...document.querySelectorAll('link')]
-    .at(-1)
-    .insertAdjacentHTML('afterend', '<link href="star-rating/theme.css" rel="stylesheet" />');
+  setStarsInit($container);
 
-  printStarRating($container);
-
-  // TODO: 클릭 이벤트 호버 이벤트 중첩된거 함수로 분리
   $container.addEventListener('mouseover', e => {
-    if (!e.target.matches('.star-rating-container > .bxs-star')) return;
+    if (!e.target.matches('.star-rating-container > .bxs-star') || e.target.matches('.selected')) return;
 
-    const stars = [...e.target.parentNode.children];
-    const targetIndex = stars.findIndex(item => item === e.target);
-
-    stars.forEach((star, index) => {
-      star.classList.toggle('hovered', index <= +targetIndex && !star.matches('.selected'));
-    });
+    changeStarsStyle(e.target, 'hovered');
   });
 
   $container.addEventListener('click', e => {
     if (!e.target.matches('.star-rating-container > .bxs-star')) return;
 
-    const stars = [...e.target.parentNode.children];
-    const targetIndex = stars.findIndex(item => item === e.target);
+    changeStarsStyle(e.target, 'selected');
+
     const custom = new CustomEvent('rating-change', {
-      detail: targetIndex + 1,
+      detail: $container.querySelectorAll('.selected').length,
     });
+
     $container.dispatchEvent(custom);
-    stars.forEach((star, index) => {
-      star.classList.toggle('selected', index <= +targetIndex);
-    });
   });
 
   $container.addEventListener('mouseout', e => {
