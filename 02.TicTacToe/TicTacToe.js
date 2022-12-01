@@ -30,20 +30,19 @@ const TicTacToe = $root => {
   // 렌더는 현재 state 기준으로 출력만을 담당.
   // prettier-ignore
   const render = () => {
-  $root.innerHTML = `
-    <h1 class="title">Tic Tac Toe</h1>
-    <div class="game">
-      <div class="game-status">${gameStatus}</div>
-      <div class="game-grid">
-        ${Array(9).fill(null).map((_, index) => `
-          <div class="game-grid-item" data-id="${index}">
-            ${playerXPicks.includes(index) ? 'X' : playerOPicks.includes(index) ? 'O' : ''}
-          </div>`).join('')}
-      </div>
-      <button class="game-reset">Try again?</button>
-    </div>`;
-  };
-  // 초기 렌더링
+      $root.innerHTML = `
+        <h1 class="title">Tic Tac Toe</h1>
+        <div class="game">
+          <div class="game-status">${gameStatus}</div>
+          <div class="game-grid">
+            ${Array(9).fill(null).map((_, index) => `
+              <div class="game-grid-item" data-id="${index}">
+                ${playerXPicks.includes(index) ? 'X' : playerOPicks.includes(index) ? 'O' : ''}
+              </div>`).join('')}
+          </div>
+          <button class="game-reset">Try again?</button>
+        </div>`;
+};
   render();
   /* ----------------------------- Mutate Function ---------------------------- */
 
@@ -90,7 +89,9 @@ const TicTacToe = $root => {
   $root.addEventListener('click', e => {
     if (!e.target.matches('.game-reset')) return;
 
-    // Q&A:
+    // Q&A: 위 코드에서 setState를 사용해 상태를 변경하고, 렌더를 했던 것과 달리 식별자에 각각 할당하여 일관성을 헤쳤다.
+    // setState 에서 todoList 처럼 newState를 받아와 state를 변경시키고 render 하고 싶었는데, 이전 코드의 구조와 많이 상이하여 리팩토링에 어려움을 겪고있다.
+    // TODO: 추후 리팩토링 할 것. setState 로직 변경.
     gameStatus = 'Next Player: X';
     nextPlayer = 'X';
     playerXPicks = [];
