@@ -75,8 +75,8 @@ const TicTacToe = $root => {
   /* ------------------------------ Event Handler ----------------------------- */
 
   $root.addEventListener('click', e => {
-    let { nextPlayer, gameStatus } = state;
     const { playerXPicks, playerOPicks } = state;
+    let { nextPlayer, gameStatus } = state;
 
     if (!e.target.matches('.game-grid > div')) return;
     if ([...playerOPicks, ...playerXPicks].includes(+e.target.dataset.id) || isBingo()) return; // 이미 체크되어 있는 부분을 클릭하거나, 빙고가 되어 게임이 종료된 경우 return.
