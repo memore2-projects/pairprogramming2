@@ -1,0 +1,91 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  background-color: #d6e1e5;
+}
+.title {
+  color: #db5b33;
+  font-weight: 300;
+  text-align: center;
+}
+.container {
+  display: flex;
+  width: 700px;
+  margin: 0 auto;
+  gap: 100px;
+}
+#accordion1,
+#accordion2 {
+  width: 300px;
+  margin: 20px 0;
+}
+
+/* accordion */
+.accordion-container {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);
+}
+.accordion-container > article > h1 {
+  position: relative;
+  margin: 0;
+  padding: 15px 15px 15px 45px;
+  font-size: 1em;
+  color: #4d4d4d;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+.accordion-container > article:last-child > h1 {
+  border-bottom: 0;
+}
+.accordion-container > article > h1 > i {
+  position: absolute;
+  top: 1.2rem;
+  left: 1rem;
+  color: #595959;
+  pointer-events: none;
+}
+.accordion-container > article.active > h1 > i {
+  transform: rotate(180deg);
+}
+.accordion-container > article.active > h1,
+.accordion-container > article.active > h1 > i {
+  color: #b63b4d;
+}
+.accordion-container > article > ul {
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  background: #444359;
+  font-size: 14px;
+  list-style-type: none;
+}
+.accordion-container > article.active > ul {
+  /* height가 0에서 auto로 변경되는 경우 transition이 발동하지 않는다. */
+  height: auto;
+}
+.accordion-container > article > ul > li {
+  height: 44px;
+  border-bottom: 1px solid #4b4a5e;
+}
+.accordion-container > article:last-child > ul {
+  border-radius: 0 0 4px 4px;
+}
+.accordion-container > article > ul > li > a {
+  display: block;
+  padding: 12px;
+  padding-left: 48px;
+  text-decoration: none;
+  color: #d9d9d9;
+  transition: all 0.2s ease-in-out;
+}
+.accordion-container > article > ul > li > a:hover {
+  color: #fff;
+  background: #b63b4d;
+}
