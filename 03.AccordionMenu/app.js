@@ -33,5 +33,7 @@ const menuList = [
   },
 ];
 
+// 컴포넌트란 무엇인가?
+// 프로그래밍에 있어 재사용이 가능한 가각의 독립된 모듈을 뜻한다.
 new Accordion({ $container: document.getElementById('accordion1'), menuList });
 new Accordion({ $container: document.getElementById('accordion2'), menuList, showMultiple: true });

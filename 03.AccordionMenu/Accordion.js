@@ -6,13 +6,14 @@ class Accordion {
     this.showMultiple = showMultiple;
 
     // 왜 findIndex를 사용햇는가? : IsOpen이 true인 것이 여러개 존재한다면 첫번째인 것만 가져와야하기때문에
-    if (!showMultiple) this.showSingleMenu = this.menuList.findIndex(menu => menu.isOpen);
+    if (!showMultiple) this.showSingleMenu(this.menuList.findIndex(menu => menu.isOpen));
 
     this.render();
 
     this.$container.addEventListener('click', e => {
       if (!e.target.matches('article > h1')) return;
-      this.changeIsOpen = e.target.parentNode.dataset.id;
+
+      this.changeIsOpen(e.target.parentNode.dataset.id);
       this.render();
     });
   }
@@ -34,7 +35,7 @@ class Accordion {
 
   // TODO: setter와 getter의 개념을 공부하고 일반 메서드로 사용할때와 어떤 차이점이 있는지 공부하자.
   // TODO: 처음 클래스를 호출했을때 단 한번만 실행이 되는데 이것을 함수로 뺴서 사용하지 않는 방법이 있는지 찾자.
-  set showSingleMenu(firstId) {
+  showSingleMenu(firstId) {
     this.menuList.map((menu, index) => {
       if (firstId !== index) menu.isOpen = false;
       return menu;
@@ -43,7 +44,7 @@ class Accordion {
 
   // changeMenuListIsOpen -> changeIsOpen으로 변경
   // 클래스 안에 코드문맥상으로 IsOpen이라는 것이 menu에 대한 상태를 의미하는 것을 누구나 알 수 있기때문에
-  set changeIsOpen(id) {
+  changeIsOpen(id) {
     // 이벤트가 일어날때 id를 받아오고 해당아이디와 같은 데이터의 isOpen를 변경한다.
     // 만약 showMultiple이 false인 인스턴스라면 클릭한 menu를 제외한 나머지 IsOpen은 false가 된다.
     this.menuList.map((menu, index) => {
