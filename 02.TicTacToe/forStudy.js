@@ -12,11 +12,12 @@ const BINGOS = [
 
 const TicTacToe = $root => {
   // state => 이벤트가 일어날 때마다 변경되는 데이터들을 관리하고, 관리된 데이터를 통해 브라우저에 출력할 수 있도록 하는 것.
-  let state = {
+  const state = {
     nextPlayer: 'X',
     // nextPlayer만 상태관리 > gameStatus 표현 가능.
     // render에서 새로 출력되는 문자열을 만들기 위한 로직을 만들어야함.
     // 그 출력되는 문자열도 이벤트마다 변경되기 때문에 상태로 관리하는 것이 좋다고 생각.
+    // Q&A: gameStatus를 상태관리 안하고 로직 안복잡하게 코드 작성
     gameStatus: 'Next Player: X',
     playerXPicks: [],
     playerOPicks: [],
@@ -24,11 +25,11 @@ const TicTacToe = $root => {
     // 최초 이벤트 발생 시 Bingo여부 상태로 저장.
   };
 
+  let { nextPlayer, playerXPicks, playerOPicks, gameStatus } = state;
+
   // 렌더는 현재 state 기준으로 출력만을 담당.
   // prettier-ignore
   const render = () => {
-    const {playerXPicks, playerOPicks, gameStatus } = state;
-    
       $root.innerHTML = `
         <h1 class="title">Tic Tac Toe</h1>
         <div class="game">
@@ -46,8 +47,6 @@ const TicTacToe = $root => {
   /* ----------------------------- Mutate Function ---------------------------- */
 
   const isBingo = () => {
-    const { nextPlayer, playerXPicks, playerOPicks } = state;
-
     let result = false;
     const arrayToCheck = nextPlayer === 'X' ? playerXPicks : playerOPicks;
 
@@ -67,39 +66,39 @@ const TicTacToe = $root => {
 
   // 3. true: `Winner is nextPlayer`를 gameStatus에 할당.
   //    false: nextPlayer 정보를 상대 플레이어로 바꾼다. / 현재 모든 구역을 체크했는가 ? true: 'Draw' gameStatus에 할당 / false: `Next Player: ${nextPlayer}` gameStatus에 할당
-  const setState = newState => {
-    state = { ...state, ...newState };
-    render();
+  const setState = gridId => {
+    nextPlayer === 'X' ? playerXPicks.push(gridId) : playerOPicks.push(gridId);
+
+    if (isBingo()) gameStatus = `Winner is ${nextPlayer}`;
+    else {
+      nextPlayer = nextPlayer === 'X' ? 'O' : 'X';
+      gameStatus = [...playerOPicks, ...playerXPicks].length === 9 ? 'Draw' : `Next Player: ${nextPlayer}`;
+    }
   };
 
   /* ------------------------------ Event Handler ----------------------------- */
 
   $root.addEventListener('click', e => {
-    let { nextPlayer, gameStatus } = state;
-    const { playerXPicks, playerOPicks } = state;
-
     if (!e.target.matches('.game-grid > div')) return;
-    if ([...playerOPicks, ...playerXPicks].includes(+e.target.dataset.id) || isBingo()) return; // 이미 체크되어 있는 부분을 클릭하거나, 빙고가 되어 게임이 종료된 경우 return.
+    if ([...playerOPicks, ...playerXPicks].includes(+e.target.dataset.id) || isBingo()) return;
 
-    // TODO: state를 바꾸기 위해서 state 내의 키값을 어떻게 바꿀건지에 대한 로직. 가독성이 안좋음.
-    nextPlayer === 'X' ? playerXPicks.push(+e.target.dataset.id) : playerOPicks.push(+e.target.dataset.id);
-
-    // 빙고인 경우 gameStatus를 변경하고 state에 할당한 뒤 바로 출력
-    if (isBingo()) gameStatus = `Winner is ${nextPlayer}`;
-    // 빙고가 아니면 게임을 지속. -> 다음 체크 할 player를 바꾸고 gameStatus도 거기에 맞게 바뀜.
-    // 만약 마지막 체크라면 'Draw'를 출력
-    else {
-      nextPlayer = nextPlayer === 'X' ? 'O' : 'X';
-      gameStatus = [...playerOPicks, ...playerXPicks].length === 9 ? 'Draw' : `Next Player: ${nextPlayer}`;
-    }
-
-    setState({ nextPlayer, gameStatus });
+    setState(+e.target.dataset.id);
+    render();
   });
 
   $root.addEventListener('click', e => {
     if (!e.target.matches('.game-reset')) return;
 
-    setState({ gameStatus: 'Next Player: X', nextPlayer: 'X', playerXPicks: [], playerOPicks: [] });
+    // Q&A: 위 코드에서 setState를 사용해 상태를 변경하고, 렌더를 했던 것과 달리 식별자에 각각 할당하여 일관성을 헤쳤다.
+    // setState 에서 todoList 처럼 newState를 받아와 state를 변경시키고 render 하고 싶었는데, 이전 코드의 구조와 많이 상이하여 리팩토링에 어려움을 겪고있다.
+    // TODO: 추후 리팩토링 할 것. setState 로직 변경.
+
+    gameStatus = 'Next Player: X';
+    nextPlayer = 'X';
+    playerXPicks = [];
+    playerOPicks = [];
+
+    render();
   });
 };
 
