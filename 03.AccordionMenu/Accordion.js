@@ -4,14 +4,14 @@ class Accordion {
     this.showMultiple = showMultiple;
     this.menuList = menuList;
 
-    this.isOpens = [];
+    this.isOpens = Array(this.menuList.length).fill(false);
     this.setInitIsOpens();
     this.render();
 
     this.$container.addEventListener('click', e => {
       if (!e.target.matches('article > h1')) return;
 
-      this.changeIsOpens(+e.target.parentNode.dataset.id);
+      this.toggleIsOpen(+e.target.parentNode.dataset.id);
       this.render();
     });
   }
@@ -33,23 +33,23 @@ class Accordion {
 
   setInitIsOpens() {
     if (this.showMultiple) {
-      this.menuList.forEach(menu => {
-        this.isOpens.push(menu.isOpen);
+      this.menuList.forEach((menu, index) => {
+        if (menu.isOpen) this.isOpens[index] = true;
       });
     } else {
       const firstTrueIndex = this.menuList.findIndex(menu => menu.isOpen);
-      this.isOpens = Array(this.menuList.length).fill(false);
+
       this.isOpens[firstTrueIndex] = true;
     }
   }
 
-  changeIsOpens(menuId) {
+  toggleIsOpen(menuId) {
     if (this.showMultiple) {
       this.isOpens[menuId - 1] = !this.isOpens[menuId - 1];
     } else {
-      const isMenuOpen = this.isOpens[menuId - 1];
-      this.isOpens = Array(this.menuList.length).fill(false);
-      this.isOpens[menuId - 1] = !isMenuOpen;
+      this.isOpens.forEach((isOpen, index) => {
+        this.isOpens[index] = index === menuId - 1 ? !isOpen : false;
+      });
     }
   }
 }
