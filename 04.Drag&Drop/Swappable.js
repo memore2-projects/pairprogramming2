@@ -66,24 +66,24 @@ export default $swappable => {
   });
 
   $swappable.addEventListener('dragenter', e => {
-    if (!e.target.matches('.draggable')) return;
+    if (!e.target.closest('.draggable')) return;
     e.preventDefault();
 
-    e.target.parentNode.classList.add('over');
+    setTimeout(() => {
+      e.target.closest('li').classList.add('over');
+    }, 0);
   });
 
   $swappable.addEventListener('dragleave', e => {
-    if (!e.target.matches('.draggable')) return;
-
     e.target.parentNode.classList.remove('over');
   });
 
   $swappable.addEventListener('drop', e => {
-    if (!e.target.matches('.draggable')) return;
+    if (!e.target.closest('.draggable')) return;
 
     e.target.parentNode.classList.remove('over');
 
-    changeLanguagePosition(e.dataTransfer.getData('dragLanguage'), e.target.textContent.trim());
+    changeLanguagePosition(e.dataTransfer.getData('dragLanguage'), e.target.closest('.draggable').textContent.trim());
     render();
   });
 };
