@@ -20,11 +20,6 @@ export default $swappable => {
       </ul>`;
   };
 
-  // languages.forEach(item => {
-  //   const randomIndex = randomArray.splice(Math.floor(Math.random() * randomArray.length), 1);
-  //   suffleLanguages[randomIndex] = item;
-  // });
-
   // randomNumberArray 변수에 인덱스를 무작위 순서로 채워넣은 배열을 할당.
   // 무작위 순서의 인덱스를 바탕으로 기존 languages의 해당 언어를 순서대로 suffledLanguages에 할당.
   const creatSuffleLanguages = () => {
@@ -35,10 +30,9 @@ export default $swappable => {
     });
   };
 
-  const changeLanguagePosition = (dragLanguage, dropLanguage) => {
-    const dragIndex = suffledLanguages.indexOf(dragLanguage);
-    const dropIndex = suffledLanguages.indexOf(dropLanguage);
-
+  // suffledLanguages의 배열에서 drag된 요소의 인덱스와 drop된 요소의 인덱스의 값을 서로 바꿈.
+  // 바뀐 배열을 바탕으로 다시 렌더링
+  const changeLanguagePosition = (dragIndex, dropIndex) => {
     // prettier-ignore
     [suffledLanguages[dragIndex], suffledLanguages[dropIndex]] =
     [suffledLanguages[dropIndex], suffledLanguages[dragIndex]];
@@ -58,7 +52,7 @@ export default $swappable => {
   // dataTransfer 프로퍼티를 이용하여 start 이벤트의 타겟 정보를 drop 이벤트에서도 접근할 수 있도록 setData 메서드를 사용하여 drag 이벤트 객체에 저장.
   // $swappable의 자식요소가 가진 textContent를 읽어오는 것이 목적. 스페이싱도 text로 인식하기 때문에 trim()
   $swappable.addEventListener('dragstart', e => {
-    e.dataTransfer.setData('dragLanguage', e.target.textContent.trim());
+    e.dataTransfer.setData('dragLanguage', e.target.closest('li').firstElementChild.textContent);
   });
 
   $swappable.addEventListener('dragover', e => {
@@ -69,6 +63,8 @@ export default $swappable => {
     if (!e.target.closest('.draggable')) return;
     e.preventDefault();
 
+    // dragenter event가 dragleave event보다 먼저 실행되기 때문에 a와 p 요소에서 .over 요소가 제거되는 현상이 있었음
+    // eragenter 이벤트 핸들러에 setTimeout을 설정하여 dragleave event보다 늦게 동작하도록 설정함으로써 p태그 a태그에서도 .over 클래스가 적용된채로 유지할 수 있었음.
     setTimeout(() => {
       e.target.closest('li').classList.add('over');
     }, 0);
@@ -78,12 +74,16 @@ export default $swappable => {
     e.target.parentNode.classList.remove('over');
   });
 
+  // dragIndex 와 dropIndex를 그냥 표현식을 인수로 주는 것 vs 변수에 담아서 주는 것 고민
+  // changeLanguagePosition 이라는 함수에 각 표현식을 뜻하는 이름의 변수를 인수로 주어 명시적으로 표현.
   $swappable.addEventListener('drop', e => {
     if (!e.target.closest('.draggable')) return;
+    const dragIndex = +e.dataTransfer.getData('dragLanguage') - 1;
+    const dropIndex = +e.target.closest('li').firstElementChild.textContent - 1;
 
     e.target.parentNode.classList.remove('over');
 
-    changeLanguagePosition(e.dataTransfer.getData('dragLanguage'), e.target.closest('.draggable').textContent.trim());
+    changeLanguagePosition(dragIndex, dropIndex);
     render();
   });
 };
