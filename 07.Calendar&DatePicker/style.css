@@ -16,6 +16,10 @@ body {
   font-size: calc(var(--calendar-size) / 25);
 }
 
+.calendar.hidden {
+  display: none;
+}
+
 .calendar-nav {
   padding: 20px 20px;
   display: flex;
@@ -60,6 +64,21 @@ body {
   height: calc(var(--calendar-size) / 10);
   width: calc(var(--calendar-size) / 10);
   justify-self: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.calendar-grid li:hover {
+  background-color: #6fee9c;
+}
+
+.calendar-grid li.day {
+  cursor: default;
+  background-color: white;
+}
+
+.calendar-grid li.clicked {
+  background-color: #6fee9c;
 }
 
 .ft-sv {
@@ -70,5 +89,4 @@ body {
 }
 .now {
   border: solid 1px #51c479;
-  border-radius: 50%;
 }

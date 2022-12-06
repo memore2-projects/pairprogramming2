@@ -1,3 +1,4 @@
-import calendar from './js/index.js';
+import Picker from './js/picker.js';
 
-calendar(document.querySelector('.calendar'));
+// const datePicker = document.createElement()
+Picker(document.querySelector('.date-picker'));
