@@ -13,12 +13,19 @@ const MONTH = [
   'December',
 ];
 
-const render = ($calendar, dateState) => {
+const render = ($calendar, dateState, newDate) => {
   const { date, nowDate, clickedIndex } = dateState;
-  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  const firstDayIndex = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   const crrLastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   const preLastDate = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
   const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDay();
+
+  console.log(Boolean(new Date(undefined)));
+
+  console.log(firstDayIndex);
+  console.log(crrLastDate);
+  console.log(preLastDate);
+  console.log(lastDay);
 
   // prettier-ignore
   $calendar.innerHTML = `
@@ -33,49 +40,49 @@ const render = ($calendar, dateState) => {
     <ul class="calendar-grid">
       ${['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
         .map(day => `<li class="day ft-sv">${day}</li>`).join('')}
-      ${Array(firstDay + crrLastDate + 6 - lastDay).fill(0).map((_, index) => {
-          if (index < firstDay) return `<li class="ft-sv ${index === clickedIndex ? 'clicked' : ''}" data-index ='${index}'>${
-            index - firstDay + preLastDate + 1
+      ${Array(firstDayIndex + crrLastDate + 6 - lastDay).fill(0).map((_, index) => {
+          if (index < firstDayIndex) return `<li class="ft-sv" data-date='${index}'>${
+            index - firstDayIndex + preLastDate + 1
           }</li>`;
 
-          if (index < firstDay + crrLastDate) return `<li class="${index % 7 === 0 ? 'ft-red' : ''} ${
+          if (index < firstDayIndex + crrLastDate) return `<li class="${index % 7 === 0 ? 'ft-red' : ''} ${
             date.getFullYear() === nowDate.getFullYear() &&
             date.getDate() === nowDate.getDate() &&
-            index - firstDay + 1 === nowDate.getDate()
+            index - firstDayIndex + 1 === nowDate.getDate()
               ? 'now'
               : ''
-          } date ${index === clickedIndex ? 'clicked' : ''}" data-index ='${index}'>${index - firstDay + 1}</li>`;
+          } date" data-date='${index}'>${index - firstDayIndex + 1}</li>`;
 
-          return `<li class="ft-sv ${index === clickedIndex ? 'clicked' : ''}" data-index ='${index}'>${
-            index - crrLastDate - firstDay + 1
+          return `<li class="ft-sv" data-date='${index}'>${
+            index - crrLastDate - firstDayIndex + 1
           }</li>`;
         }).join('')}
     </ul>`;
-
-  console.log(clickedIndex);
 };
 
-const Calendar = $calendar => {
+const Calendar = ($calendar, $datePicker) => {
   const dateState = {
     date: new Date(),
     nowDate: new Date(),
-    clickedIndex: null,
   };
 
   render($calendar, dateState);
 
   $calendar.addEventListener('click', e => {
     if (!e.target.matches('.calendar-grid > li')) return;
+    // $calendar.classList.add('hidden');
+    const clickedYear = document.querySelector('.calendar-title').lastElementChild.textContent;
+    const clickedMonth = MONTH.indexOf(document.querySelector('.calendar-title').firstElementChild.textContent) + 1;
+    const clickedDate = e.target.dataset.index;
 
-    dateState.clickedIndex = +e.target.dataset.index;
-    $calendar.classList.add('hidden');
-    console.log(dateState.clickedIndex);
-  });
-
-  document.body.addEventListener('click', e => {
-    if (!e.target.closest('.calendar')) {
-      $calendar.classList.add('hidden');
-    }
+    const dateClick = new CustomEvent('date-click', {
+      detail: {
+        clickedYear,
+        clickedMonth,
+        clickedDate,
+      },
+    });
+    $datePicker.dispatchEvent(dateClick);
   });
 };
 

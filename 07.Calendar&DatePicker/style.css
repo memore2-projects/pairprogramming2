@@ -16,10 +16,6 @@ body {
   font-size: calc(var(--calendar-size) / 25);
 }
 
-.calendar.hidden {
-  display: none;
-}
-
 .calendar-nav {
   padding: 20px 20px;
   display: flex;
