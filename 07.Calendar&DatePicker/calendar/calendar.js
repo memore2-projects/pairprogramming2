@@ -1,9 +1,17 @@
-import setDateState from './setDate.js';
 import CalendarRender from './render.js';
 
 [...document.querySelectorAll('link')]
   .at(-1)
   .insertAdjacentHTML('afterend', '<link href="./calendar/calendar.css" rel="stylesheet" />');
+
+const setDateState = (target, dateState) => {
+  if (target.closest('.arrow.left')) {
+    dateState.date = new Date(dateState.date.getFullYear(), dateState.date.getMonth() - 1, dateState.date.getDate());
+  }
+  if (target.closest('.arrow.right')) {
+    dateState.date = new Date(dateState.date.getFullYear(), dateState.date.getMonth() + 1, dateState.date.getDate());
+  }
+};
 
 const Calendar = ($calendar, $datePicker) => {
   const dateState = {

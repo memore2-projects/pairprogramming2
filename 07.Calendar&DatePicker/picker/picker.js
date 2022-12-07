@@ -18,22 +18,25 @@ const Picker = $datePicker => {
   let newDate = null;
 
   $datePicker.addEventListener('click', e => {
-    if (e.target.matches('.date-select') && !$calendar.firstElementChild) CalendarRender($calendar, dateState, newDate);
-    else if (!$calendar.contains(e.target) && !e.target.closest('button')) $calendar.innerHTML = '';
+    if (e.target.matches('.date-select') && !$calendar.firstElementChild) {
+      CalendarRender($calendar, dateState, newDate);
+    }
+    // TODO: e.target.closest('button')하는 이유: icon클릭했을 경우에 closest이 calendar를 찾지 못했다. 그래서 사용할수밖에 없었다. 이유를 찾자!!
+    else if (!e.target.closest('.calendar') && !e.target.closest('button')) $calendar.innerHTML = '';
   });
 
-  document.body.addEventListener('click', e => {
+  window.addEventListener('click', e => {
     if (e.target.closest('.calendar') || e.target.matches('.date-select') || e.target.closest('button')) return;
     $calendar.innerHTML = '';
+    dateState.date = new Date();
   });
 
   // prettier-ignore
   $datePicker.addEventListener('date-click', e => {
     const { clickedYear, clickedMonth, clickedDate } = e.detail;
-    $datePicker.querySelector('.date-select').value = `${clickedYear}-${clickedMonth.padStart(
-      2,
-      0
-    )}-${clickedDate.padStart(2, 0)}`;
+    $datePicker.querySelector('.date-select').value = `
+      ${clickedYear}-${clickedMonth.padStart(2,0)}-${clickedDate.padStart(2, 0)}
+      `;
 
     newDate = {
       clickedYear,
