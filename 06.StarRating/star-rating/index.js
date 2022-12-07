@@ -1,3 +1,8 @@
+// html의 가장 마지막에 있는 link태그 아래에 동적으로 theme.css 파일을 추가로 링크.
+[...document.querySelectorAll('link')]
+  .at(-1)
+  .insertAdjacentHTML('afterend', '<link href="star-rating/theme.css" rel="stylesheet" />');
+
 // prettier-ignore
 /**
  * 초기 star 렌더링
@@ -5,17 +10,14 @@
  * star 아이콘을 추가하기 위해 개수(maxRating) 크기의 배열을 생성하고 map 고차함수를 통해 생성.
  */
 const printStarsInit = $container => {
-  // html의 가장 마지막에 있는 link태그 아래에 동적으로 theme.css 파일을 추가로 링크.
-  [...document.querySelectorAll('link')]
-  .at(-1)
-  .insertAdjacentHTML('afterend', '<link href="star-rating/theme.css" rel="stylesheet" />');
-
   $container.innerHTML = `
     <div class='star-rating-container'>
-      ${Array(+$container.dataset.maxRating).fill('')
-        .map(() => `<i class='bx bxs-star'></i>`).join('')}
-    </div>`
-}
+      ${Array(+$container.dataset.maxRating)
+        .fill('')
+        .map(() => `<i class='bx bxs-star'></i>`)
+        .join('')}
+    </div>`;
+};
 
 const addClassToStar = ($star, className) => {
   const stars = [...$star.parentNode.children];

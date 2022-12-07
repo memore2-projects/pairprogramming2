@@ -1,4 +1,4 @@
-import Picker from './js/picker.js';
+import Picker from './picker/picker.js';
 
 // const datePicker = document.createElement()
 Picker(document.querySelector('.date-picker'));

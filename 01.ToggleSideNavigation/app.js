@@ -8,12 +8,13 @@ const $nav = document.querySelector('nav');
 // 3. 'false' 이라면 false
 // 값이 존재한다면 그 값을 문자열로 반환하기 때문에 JSON.parse를 사용했다.
 // or 연산자와 null 병합 연산자의 차이를 생각해보자
-let isNavOpened = JSON.parse(localStorage.getItem('navOpened')) ?? false;
-
+let isNavOpened = null
 // DOMContentLoaded를 사용한 이유:
 // DOM을 생성하자마자 active를 붙인 상태로 paint를 하고 싶었다.
 // 새로고침 했을때 nav의 움직임이 보여지는 것이 싫었기 때문이다.
 window.addEventListener('DOMContentLoaded', () => {
+isNavOpened = JSON.parse(localStorage.getItem('navOpened')) ?? false;
+
   $nav.classList.toggle('active', isNavOpened);
 
   document.body.style.visibility = 'visible';
