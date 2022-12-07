@@ -12,9 +12,9 @@ const MONTH = [
   'November',
   'December',
 ];
-
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
+// dateState.nowDate(현재 날짜)와 dateState.date(화면에 보여지는 날짜)를 비교하여 현재날짜가 화면에 보여질 때 체크.
 const isEqualDateToNow = (dateState, index, firstDayIndex) =>
   dateState.date.getFullYear() === dateState.nowDate.getFullYear() &&
   dateState.date.getMonth() === dateState.nowDate.getMonth() &&
@@ -25,8 +25,7 @@ const calendarDateString = (calendarDatas, dateState, index) => {
   const { firstDayIndex, curLastDate, preLastDate } = calendarDatas;
 
   if (index < firstDayIndex)
-    return `
-    <li class="ft-sv" data-date='${dateState.date.getFullYear()}-${dateState.date.getMonth()}-${index - firstDayIndex + preLastDate + 1}'>
+    return `<li class="ft-sv" data-date='${dateState.date.getFullYear()}-${dateState.date.getMonth()}-${index - firstDayIndex + preLastDate + 1}'>
       ${index - firstDayIndex + preLastDate + 1}
     </li>`;
 
@@ -46,6 +45,9 @@ const calendarDateString = (calendarDatas, dateState, index) => {
 const CalendarRender = ($calendar, dateState, pickerDate) => {
   if (pickerDate)
     dateState.date = new Date(`${pickerDate.clickedYear}/${pickerDate.clickedMonth}/${pickerDate.clickedDate}`);
+
+  // 날짜가 바뀔 경우 nowDate를 재할당하여, 재할당된 nowDate를 기준으로 현재 날짜 체크
+  dateState.nowDate = new Date();
 
   const calendarDatas = {
     firstDayIndex: new Date(dateState.date.getFullYear(), dateState.date.getMonth(), 1).getDay(),
@@ -70,7 +72,8 @@ const CalendarRender = ($calendar, dateState, pickerDate) => {
         .fill(0)
         .map((_, index) => calendarDateString(calendarDatas,dateState,index))
         .join('')}
-    </ul>`;
+    </ul>
+  `;
 
   if (pickerDate) {
     [...$calendar.querySelectorAll('.calendar-grid > li')].forEach(date => {

@@ -1,9 +1,11 @@
 import CalendarRender from './render.js';
 
+// 재사용성을 위하여 index.html 파일에 calendar와 관련된 style을 동적으로 추가한다.
 [...document.querySelectorAll('link')]
   .at(-1)
   .insertAdjacentHTML('afterend', '<link href="./calendar/calendar.css" rel="stylesheet" />');
 
+// calendar에서 화살표 버튼을 눌렀을 때 보여줄 달에 대한 정보(dateState)를 변경한다.
 const setDateState = (target, dateState) => {
   if (target.closest('.arrow.left')) {
     dateState.date = new Date(dateState.date.getFullYear(), dateState.date.getMonth() - 1, dateState.date.getDate());
@@ -14,6 +16,8 @@ const setDateState = (target, dateState) => {
 };
 
 const Calendar = ($calendar, $datePicker) => {
+  // date : 사용자가 .date-select를 클릭했을 때 보여줄 날짜에 대한 정보.
+  // nowDate : 첫 렌더링시의 날짜 정보를 기억하기위해 선언한 변수.
   const dateState = {
     date: new Date(),
     nowDate: new Date(),
