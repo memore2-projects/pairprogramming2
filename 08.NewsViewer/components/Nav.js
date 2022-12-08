@@ -1,23 +1,43 @@
 // do something!
+import categoryProxy from './category.js';
 
-const render = $container => {
+const categoryArr = [
+  ['all', '전체보기'],
+  ['business', '비즈니스'],
+  ['entertainment', '엔터테인먼트'],
+  ['health', '건강'],
+  ['science', '과학'],
+  ['sports', '스포츠'],
+  ['technology', '기술'],
+];
+
+// prettier-ignore
+const NavRender = $container => {
   $container.innerHTML = `
-  <nav class="category-list">
-        <ul>
-          <li id="all" class="category-item active">전체보기</li>
-          <li id="business" class="category-item">비즈니스</li>
-          <li id="entertainment" class="category-item">엔터테인먼트</li>
-          <li id="health" class="category-item">건강</li>
-          <li id="science" class="category-item">과학</li>
-          <li id="sports" class="category-item">스포츠</li>
-          <li id="technology" class="category-item">기술</li>
-        </ul>
-      </nav>
-  `;
+    <nav class="category-list">
+      <ul>${categoryArr.map(category => `
+        <li id="${category[0]}" class="category-item ${categoryProxy.selectedCategory === category[0] ? 'active' : ''}">
+          ${category[1]}
+        </li>`).join('')}
+      </ul>
+    </nav>`;
+  
 };
 
 const Nav = $container => {
-  render($container);
+  NavRender($container);
+  
+  categoryProxy.selectedCategory = 'all';
+
+  $container.addEventListener('click', e => {
+    if (!e.target.matches('.category-item')) return;
+
+    categoryProxy.selectedCategory = e.target.id;
+
+    $container.querySelectorAll('.category-item').forEach(category => {
+      category.classList.toggle('active', category.id === e.target.id);
+    });
+  });
 };
 
 export default Nav;
