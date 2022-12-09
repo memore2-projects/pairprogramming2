@@ -50,7 +50,7 @@ const Picker = $datePicker => {
       clickedMonth,
       clickedDate,
     };
-   
+    
       $calendar.innerHTML = '';
   });
 };
