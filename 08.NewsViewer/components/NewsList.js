@@ -1,4 +1,5 @@
-const pageSize = 5;
+const PAGE_SIZE = 5;
+
 const apiKey = '07030d65ffe043778447ce7ad2e3d90d';
 let page = 0;
 
@@ -7,12 +8,13 @@ let page = 0;
 const getNewsAPI = async selectedCategory => {
   try {
     page += 1;
+
     const url = `https://newsapi.org/v2/top-headlines?country=kr&category=${
       selectedCategory === 'all' ? '' : selectedCategory
-    }&page=${page}&pageSize=${pageSize}&apiKey=${apiKey}`;
-    const {
-      data: { articles: news },
-    } = await axios.get(url);
+    }&page=${page}&pageSize=${PAGE_SIZE}&apiKey=${apiKey}`;
+
+    // prettier-ignore
+    const {data: { articles: news },} = await axios.get(url);
     return news;
   } catch (error) {
     console.log('getNewsAPI', error);
@@ -25,6 +27,7 @@ const addNewsItems = async category => {
     const news = await getNewsAPI(category);
     const $newsList = document.querySelector('.news-list');
     const $div = document.createElement('div');
+
     $div.innerHTML = `
       ${news.map(({ title, url, urlToImage, description }) => `
         <section class="news-item">
@@ -54,6 +57,7 @@ const addNewsItems = async category => {
 // 2. 카테고리(상태) 변경될 시의 호출 : 기존 존재하던 news-list를 삭제하고, 변경된 카테고리의 news-list 로 교체.
 const NewsListRender = async ($root, selectedCategory) => {
   page = 0;
+
   const news = await getNewsAPI(selectedCategory);
   const $div = document.createElement('div');
 

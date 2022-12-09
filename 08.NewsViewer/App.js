@@ -11,6 +11,7 @@ const categoryObj = { selectedCategory: 'all' };
 const categoryHandler = {
   set(target, prop, receiver) {
     target[prop] = receiver;
+
     NewsListRender($root, target.selectedCategory);
     return true;
   },

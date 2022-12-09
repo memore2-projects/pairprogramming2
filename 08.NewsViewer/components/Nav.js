@@ -12,11 +12,10 @@ const CATEGORY_ARRAY = [
 const NavRender = ($root, categoryProxy) => {
   $root.innerHTML = `
     <nav class="category-list">
-      <ul>${CATEGORY_ARRAY
-        .map(category => `
-          <li id="${category[0]}" class="category-item ${categoryProxy.selectedCategory === category[0] ? 'active' : ''}">
-            ${category[1]}
-          </li>`).join('')}
+      <ul>${CATEGORY_ARRAY.map(category => `
+        <li id="${category[0]}" class="category-item ${categoryProxy.selectedCategory === category[0] ? 'active' : ''}">
+          ${category[1]}
+        </li>`).join('')}
       </ul>
     </nav>`;
 };
