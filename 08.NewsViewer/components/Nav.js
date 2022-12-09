@@ -12,8 +12,8 @@ const categoryArr = [
 ];
 
 // prettier-ignore
-const NavRender = $container => {
-  $container.innerHTML = `
+const NavRender = $root => {
+  $root.innerHTML = `
     <nav class="category-list">
       <ul>${categoryArr.map(category => `
         <li id="${category[0]}" class="category-item ${categoryProxy.selectedCategory === category[0] ? 'active' : ''}">
@@ -24,17 +24,15 @@ const NavRender = $container => {
   
 };
 
-const Nav = $container => {
-  NavRender($container);
-  
-  categoryProxy.selectedCategory = 'all';
+const Nav = $root => {
+  NavRender($root);
 
-  $container.addEventListener('click', e => {
+  $root.addEventListener('click', e => {
     if (!e.target.matches('.category-item')) return;
 
     categoryProxy.selectedCategory = e.target.id;
 
-    $container.querySelectorAll('.category-item').forEach(category => {
+    $root.querySelectorAll('.category-item').forEach(category => {
       category.classList.toggle('active', category.id === e.target.id);
     });
   });

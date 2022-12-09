@@ -1,11 +1,11 @@
-import { addNewsItems } from './NewsList.js';
+import { NewsListRender } from './NewsList.js';
 
 const categoryObj = { selectedCategory: 'all' };
 
 const categoryHandler = {
   set(target, prop, receiver) {
     target[prop] = receiver;
-    addNewsItems(target.selectedCategory);
+    NewsListRender(target.selectedCategory);
     return true;
   },
   get(target) {
