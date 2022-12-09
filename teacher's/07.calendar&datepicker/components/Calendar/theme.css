@@ -1,0 +1,85 @@
+@import url(https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css);
+
+.calendar-container {
+  /* --calendar-width의 값이 변경되면 캘린더 전체의 크기와 폰트 사이즈가 연동해서 조정되도록 한다. */
+  --calendar-width: 360px;
+  /* --calendar-width = grid-item-size * 7 + (padding-left + padding-right) */
+  --calendar-grid-item-size: calc((var(--calendar-width) - 10px) / 7);
+  /* --calendar-width가 360px일 때 14.4px */
+  --calendar-font-size: calc(var(--calendar-width) * 0.04);
+  --calendar-primary-color: #43c37a;
+
+  width: var(--calendar-width);
+  box-shadow: 1px 1px 20px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 0 5px 5px;
+  font-size: var(--calendar-font-size);
+}
+.calendar-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  margin: -5px;
+  margin-bottom: 0;
+  background-color: var(--calendar-primary-color);
+  color: #fff;
+  border-radius: 10px 10px 0 0;
+}
+.calendar-nav > .calendar-title {
+  text-align: center;
+  color: #fff;
+}
+.calendar-nav > .calendar-title > .month {
+  font-size: 1.4em;
+}
+.calendar-nav > .prev,
+.calendar-nav > .next {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 1.8em;
+  cursor: pointer;
+}
+.calendar-grid {
+  display: grid;
+  /*
+  grid-template-columns => 열(column)의 배치를 지정한다.
+  - repeat(반복횟수, 반복값)
+  - fr(fraction) => 숫자 비율대로 트랙의 크기를 설정한다.
+  */
+  grid-template-columns: repeat(7, 1fr);
+  /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr; */
+}
+.calendar-grid > .day,
+.calendar-grid > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--calendar-grid-item-size);
+}
+.calendar-grid > .day {
+  color: rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+}
+.calendar-grid > div:not(.day) {
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+.calendar-grid > .sunday {
+  color: red;
+}
+.calendar-grid > .muted {
+  color: rgba(0, 0, 0, 0.3);
+}
+.calendar-grid > .today {
+  border: 1px solid var(--calendar-primary-color);
+}
+.calendar-grid > div:not(.day):hover,
+.calendar-grid > .selected,
+.calendar-grid > .selected.muted {
+  color: #fff;
+  background-color: var(--calendar-primary-color);
+}
