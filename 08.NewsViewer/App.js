@@ -1,7 +1,41 @@
-import { Nav, NewsList } from './components/index.js';
+import { Nav, NewsList, NewsListRender } from './components/index.js';
 
-// do something!
 const $root = document.getElementById('root');
 
-Nav($root);
-NewsList($root);
+const categoryObj = { selectedCategory: 'all' };
+
+// 프록시를 통해 상태가 변경되었을 때 NewsList를 자동적으로 리렌더링.
+// 사실 이렇게 적은 양의 프로퍼티를 다루기 위해서는 proxy를 사용할 필요가 없다. 컨셉이 상태가 바뀌었을 때 상태를 구독하는 모든 컴포넌트들이 영향을 받아 싹 리렌더링 되는 것을 목적으로 사용.
+
+// 우리는 NewsList만 리렌더링 했는데 Nav까지 리렌더링 하는게 이 컨셉에 맞겠다고 생각함.
+const categoryHandler = {
+  set(target, prop, receiver) {
+    target[prop] = receiver;
+    NewsListRender($root, target.selectedCategory);
+    return true;
+  },
+  get(target) {
+    return target.selectedCategory;
+  },
+};
+
+const categoryProxy = new Proxy(categoryObj, categoryHandler);
+
+Nav($root, categoryProxy);
+NewsList($root, categoryProxy);
+
+export default categoryProxy;
+
+/* ----------------------------------- --- ---------------------------------- */
+// notify(target);
+// // 옵저버 패턴
+
+// store // 스토어 안에는 상태들이 저장
+
+// listeners = [Nav, NewsListRender]// 실행할 함수는 인스턴스 렌더링하는
+
+// subscribe // 상태 변화를 관찰해야하는 인스턴스 또는 컴포넌트 또는 렌더 구독하라는 의미
+
+// notify = (state) => {
+//   listeners.forEach(listener => listener(state))
+// }
